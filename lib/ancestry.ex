@@ -14,6 +14,7 @@ defmodule Ancestry do
       @orphan_stategy options[:orphan_strategy] || :destroy
 
 
+      # ---- Delete a model and apply_orphan_strategy
       def delete(model) do
         multi =
           Multi.new
