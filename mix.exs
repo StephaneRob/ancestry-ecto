@@ -3,7 +3,7 @@ defmodule Ancestry.Mixfile do
 
   def project do
     [app: :ancestry,
-     version: "0.1.0.alpha",
+     version: "0.1.0-alpha.1",
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
