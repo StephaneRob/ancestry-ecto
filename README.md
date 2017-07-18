@@ -26,10 +26,10 @@ defmodule Migration do
   use Ecto.Migration
 
   def change do
-    alter table(:[table]) do
+    alter table(:my_models) do
       add :ancestry, :string
     end
-    create index(:<model>, [:ancestry])
+    create index(:my_models, [:ancestry])
   end
 end
 ```
@@ -41,13 +41,13 @@ mix ecto.migrate
 Add `use Ancestry` to your model ex:
 
 ```elixir
-defmodule Page do
+defmodule MyModel do
   use Ecto.Schema
   use Ancestry
 
   import Ecto.Changeset
 
-  schema "pages" do
+  schema "my_models" do
     field :ancestry, :string
   end
 
@@ -79,18 +79,18 @@ use Ancestry,
 ### Usage
 
 ```elixir
-MyModule.MyModel.roots
-MyModule.MyModel.root?(model)
-MyModule.MyModel.ancestor_ids(model)
-MyModule.MyModel.ancestors(model)
-MyModule.MyModel.parent_id(model)
-MyModule.MyModel.parent(model)
-MyModule.MyModel.children(model)
-MyModule.MyModel.child_ids(model)
-MyModule.MyModel.siblings(model)
-MyModule.MyModel.sibling_ids(model)
-MyModule.MyModel.descendants_ids(model)
-MyModule.MyModel.descendants(model)
+MyModel.roots
+MyModel.root?(model)
+MyModel.ancestor_ids(model)
+MyModel.ancestors(model)
+MyModel.parent_id(model)
+MyModel.parent(model)
+MyModel.children(model)
+MyModel.child_ids(model)
+MyModel.siblings(model)
+MyModel.sibling_ids(model)
+MyModel.descendants_ids(model)
+MyModel.descendants(model)
 ```
 
 ### TODO
