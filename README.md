@@ -13,7 +13,6 @@ def deps do
 end
 ```
 
-### Usage
 Add an `ancestry` string field in your model
 
 ```bash
@@ -27,10 +26,8 @@ defmodule Migration do
   use Ecto.Migration
 
   def change do
-    create table(:<model>) do
+    alter table(:[table]) do
       add :ancestry, :string
-
-      timestamps()
     end
     create index(:<model>, [:ancestry])
   end
@@ -60,6 +57,40 @@ defmodule Page do
   end
 end
 
+```
+
+### Options
+
+```elixir
+use Ancestry,
+  repo: MyApp.Repo,
+  model: Myapp.Page,
+  orphan_strategy: :rootify
+```
+
+- repo
+- model
+- orphan_strategy : Instruct Ancestry what to do with children of an element that is destroyed
+  - `:destroy`: All children are destroyed as well (default)
+  - `:rootify`: The children of the destroyed node become root nodes
+  - `:restrict`: An AncestryException is raised if any children exist
+  - `:adopt`: The orphan subtree is added to the parent of the deleted node, If the deleted node is Root, then rootify the orphan subtree.
+
+### Usage
+
+```elixir
+MyModule.MyModel.roots
+MyModule.MyModel.root?(model)
+MyModule.MyModel.ancestor_ids(model)
+MyModule.MyModel.ancestors(model)
+MyModule.MyModel.parent_id(model)
+MyModule.MyModel.parent(model)
+MyModule.MyModel.children(model)
+MyModule.MyModel.child_ids(model)
+MyModule.MyModel.siblings(model)
+MyModule.MyModel.sibling_ids(model)
+MyModule.MyModel.descendants_ids(model)
+MyModule.MyModel.descendants(model)
 ```
 
 ### TODO

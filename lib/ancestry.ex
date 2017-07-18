@@ -5,14 +5,13 @@ defmodule Ancestry do
       import Ecto
       import Ecto.Query
 
-      alias Ecto.Multi
+      alias Ecto.{Multi, Changeset}
 
       options = unquote(options)
       @model options[:model] || __MODULE__
       @app options[:app] || [@model |> Module.split |> List.first] |> Module.concat
       @repo options[:repo] || @app |> Module.concat("Repo")
-      @orphan_stategy options[:orphan_strategy] || :destroy
-
+      @orphan_stategy options[:orphan_strategy] || :rootify
 
       # ---- Delete a model and apply_orphan_strategy
       def delete(model) do
@@ -24,27 +23,68 @@ defmodule Ancestry do
       end
 
       # ---- Callbacks
-      def apply_orphan_strategy(_, model) do
+      def apply_orphan_strategy(%{delete_model: model}) do
         if model.id do
           case @orphan_stategy do
-           :rootify ->
-             rootify_children(model)
-           :destroy ->
-             destroy_children(model)
-           :adopt ->
-             adopt_children(model)
+            :rootify ->
+              rootify_children(model)
+            :destroy ->
+              destroy_children(model)
+            :adopt ->
+              adopt_children(model)
+            :restrict ->
+              restrict_children(model)
           end
         end
          {:ok, model}
       end
 
       defp rootify_children(model) do
+        child_ancestry = child_ancestry(model)
+        for descendant <- descendants(model) do
+          new_ancestry = case descendant.ancestry do
+             ^child_ancestry -> nil
+             _ ->
+               descendant.ancestry
+               |> String.replace(~r/^#{child_ancestry}\//, "")
+          end
+          descendant
+          |> Changeset.change(ancestry: new_ancestry)
+          |> @repo.update
+        end
       end
 
       defp destroy_children(model) do
+        descendants_query(model)
+        |> @repo.delete_all
       end
 
       defp adopt_children(model) do
+        for descendant <- descendants(model) do
+          new_ancestry = ancestor_ids(descendant)
+            |> Enum.reject(fn(x) -> x == model.id end)
+            |> Enum.join("/")
+          new_ancestry = case new_ancestry do
+            "" -> nil
+            _ -> new_ancestry
+          end
+          descendant
+          |> Changeset.change(ancestry: new_ancestry)
+          |> @repo.update
+        end
+      end
+
+      def restrict_children(model) do
+        if children?(model), do: raise Ancestry.RestrictError
+      end
+
+      def update_descendants_with_new_ancestry(model) do
+        for descendant <- descendants(model) do
+          ancestry = descendant.ancestry
+            |> String.replace(~r/^#{child_ancestry(model)}/, "")
+          descendant
+          |> Changeset.change(:ancestry, ancestry)
+        end
       end
 
       # ---- Root
@@ -101,19 +141,24 @@ defmodule Ancestry do
 
       def set_parent(model, parent) do
         model
-        |> Ecto.Changeset.change(ancestry: child_ancestry(parent))
+        |> Changeset.change(ancestry: child_ancestry(parent))
       end
+
       def set_parent!(model, parent) do
         set_parent(model, parent)
         |> @repo.update
       end
 
       # ---- Children
-      def children(model) do
+      def children_query(model) do
         query = from u in @model,
           where: u.ancestry == ^child_ancestry(model),
           order_by: u.inserted_at
-        @repo.all(query)
+      end
+
+      def children(model) do
+        children_query(model)
+        |> @repo.all
       end
 
       def child_ids(model) do
@@ -125,11 +170,15 @@ defmodule Ancestry do
       end
 
       # ---- Siblings
-      def siblings(model) do
+      def siblings_query(model) do
         query = from u in @model,
           where: u.ancestry == ^"#{model.ancestry}",
           order_by: u.inserted_at
-        @repo.all(query)
+      end
+
+      def siblings(model) do
+        siblings_query(model)
+        |> @repo.all
       end
 
       def sibling_ids(model) do
@@ -141,27 +190,23 @@ defmodule Ancestry do
       end
 
       # ---- Descendants
-      def descendants_ids(model) do
+      def descendants_query(model) do
         query_string = case root?(model) do
           true -> "#{model.id}"
           false -> "#{model.ancestry}/#{model.id}"
         end
         query = from u in @model,
-          where: like(u.ancestry, ^"#{query_string}/%"),
+          where: like(u.ancestry, ^"#{query_string}%")
+      end
+
+      def descendants(model) do
+        query = from u in descendants_query(model),
           order_by: u.inserted_at
         @repo.all(query)
       end
 
-      def descendants(model) do
-        ids = descendants_ids(model)
-        case descendants_ids(model) do
-          nil -> nil
-          desce ->
-            query = from u in @model,
-              where: u.id in ^ids,
-              order_by: u.inserted_at
-            @repo.all(query)
-        end
+      def descendant_ids(model) do
+        for descendant <- descendants(model), do: Map.get(descendant, :id)
       end
 
       defp child_ancestry(model) do

@@ -11,7 +11,7 @@ defmodule Ancestry.TestProject do
 
   defmodule Page do
     use Ecto.Schema
-    use Ancestry
+    use Ancestry, repo: Repo
 
     import Ecto.Changeset
 
