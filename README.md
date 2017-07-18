@@ -93,7 +93,7 @@ MyModel.descendants_ids(model)
 MyModel.descendants(model)
 ```
 
-### TODO
+### Roadmap
 
 - [ ] roots
 - [ ] ancestors
@@ -101,6 +101,12 @@ MyModel.descendants(model)
 - [ ] descendants
 - [ ] siblings
 - [ ] tests
+- [ ] orphan strategies
+  - [ ] rootify
+  - [ ] destroy
+  - [ ] adopt
+  - [ ] restrict
+
 
 ## License
 
