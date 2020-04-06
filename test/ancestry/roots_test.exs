@@ -1,24 +1,51 @@
 defmodule Ancestry.Test.RootsTest do
-  use ExUnit.Case
-  doctest Ancestry
+  use Ancestry.Case
 
-  alias Ancestry.TestProject
-  alias Ancestry.TestProject.{Page, Repo}
+  alias Ancestry.{Page, Root, TestRepo}
 
-  setup do
-    TestProject.Helpers.cleanup
-    :ok
+  describe "w/ default option" do
+    test "get all roots elements", %{options: options} do
+      assert length(Root.list(options)) == 2
+    end
+
+    test "Check if page is root", %{options: options, refs: %{ref1: ref1, ref2: ref2}} do
+      page1 = TestRepo.get_by!(Page, reference: ref1)
+      assert Root.root?(page1, options)
+      page2 = TestRepo.get_by!(Page, reference: ref2)
+      refute Root.root?(page2, options)
+    end
   end
 
-  test "get all roots elements" do
-    roots = Page.roots
-    assert length(roots) == 2
+  describe "w/ custom ancestry column" do
+    @describetag custom_options: [column: :custom_ancestry]
+
+    test "get all roots elements", %{options: options} do
+      assert length(Root.list(options)) == 2
+    end
+
+    test "Check if page is root", %{options: options, refs: %{ref1: ref1, ref2: ref2}} do
+      page1 = TestRepo.get_by!(Page, reference: ref1)
+      assert Root.root?(page1, options)
+      page2 = TestRepo.get_by!(Page, reference: ref2)
+      refute Root.root?(page2, options)
+    end
   end
 
-  test "Check if page is root" do
-    page = Repo.get(Page, 1)
-    page2 = Repo.get(Page, 2)
-    assert Page.root?(page) == true
-    assert Page.root?(page2) == false
+  describe "w/ custom ancestry column and custom attribute columtn" do
+    @describetag custom_options: [
+                   column: :custom_ancestry_custom_attribute,
+                   attribute: {:reference, :string}
+                 ]
+
+    test "get all roots elements", %{options: options} do
+      assert length(Root.list(options)) == 2
+    end
+
+    test "Check if page is root", %{options: options, refs: %{ref1: ref1, ref2: ref2}} do
+      page1 = TestRepo.get_by!(Page, reference: ref1)
+      assert Root.root?(page1, options)
+      page2 = TestRepo.get_by!(Page, reference: ref2)
+      refute Root.root?(page2, options)
+    end
   end
 end

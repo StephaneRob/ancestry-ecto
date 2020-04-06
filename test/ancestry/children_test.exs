@@ -1,32 +1,94 @@
-defmodule Ancestry.Test.ChildrenTest do
-  use ExUnit.Case
-  doctest Ancestry
+defmodule Ancestry.ChildrenTest do
+  use Ancestry.Case
 
-  alias Ancestry.TestProject
-  alias Ancestry.TestProject.{Repo, Page}
+  alias Ancestry.{Children, Page}
 
-  setup do
-    TestProject.Helpers.cleanup
-    :ok
+  describe "w/ default option" do
+    test "list children ids", %{
+      options: options,
+      pages: %{page1: page1, page6: page6, page2: page2}
+    } do
+      assert Children.ids(page1, options) == [page6.id, page2.id]
+    end
+
+    test "list children", %{
+      options: options,
+      pages: %{page1: page1, page6: page6, page2: page2}
+    } do
+      page6_id = page6.id
+      page2_id = page2.id
+      assert [%Page{id: ^page6_id}, %Page{id: ^page2_id}] = Children.list(page1, options)
+    end
+
+    test "children?/2", %{
+      options: options,
+      pages: %{page1: page1, page6: page6}
+    } do
+      assert Children.children?(page1, options)
+      refute Children.children?(page6, options)
+    end
   end
 
-  test "get children" do
-    page = Repo.get(Page, 3)
-    assert length(Page.children(page)) == 1
-    page = Repo.get(Page, 1)
-    assert length(Page.children(page)) == 2
+  describe "w/ custom ancestry column" do
+    @describetag custom_options: [column: :custom_ancestry]
+    test "list children ids", %{
+      options: options,
+      pages: %{page1: page1, page6: page6, page2: page2}
+    } do
+      assert Children.ids(page1, options) |> Enum.sort() == [page2.id, page6.id]
+    end
+
+    test "list children", %{
+      options: options,
+      pages: %{page1: page1, page6: page6, page2: page2}
+    } do
+      page6_id = page6.id
+      page2_id = page2.id
+
+      assert [%Page{id: ^page2_id}, %Page{id: ^page6_id}] =
+               Children.list(page1, options) |> Enum.sort(&(&1.id < &2.id))
+    end
+
+    test "children?/2", %{
+      options: options,
+      pages: %{page1: page1, page6: page6}
+    } do
+      assert Children.children?(page1, options)
+      refute Children.children?(page6, options)
+    end
   end
 
-  test "get child ids" do
-    page = Repo.get(Page, 1)
-    assert Page.child_ids(page) == [2, 6]
-  end
+  describe "w/ custom ancestry column and custom attribute columtn" do
+    @describetag custom_options: [
+                   column: :custom_ancestry_custom_attribute,
+                   attribute: {:reference, :string}
+                 ]
 
-  test "Check if page has children" do
-    page = Repo.get(Page, 1)
-    assert Page.children?(page) == true
+    test "ids/2", %{
+      options: options,
+      pages: %{page1: page1, page6: page6, page2: page2}
+    } do
+      assert Children.ids(page1, options) |> Enum.sort(&(&1 < &2)) ==
+               [page2.reference, page6.reference] |> Enum.sort(&(&1 < &2))
+    end
 
-    page = Repo.get(Page, 4)
-    assert Page.children?(page) == false
+    test "list/2", %{
+      options: options,
+      pages: %{page1: page1, page6: page6, page2: page2}
+    } do
+      page6_id = page6.id
+      page2_id = page2.id
+
+      assert [%Page{id: ^page2_id}, %Page{id: ^page6_id}] =
+               Children.list(page1, options) |> Enum.sort(&(&1.id < &2.id))
+    end
+
+    test "children?/2", %{
+      options: options,
+      pages: %{page1: page1, page6: page6}
+    } do
+      assert Children.children?(page1, options)
+      refute Children.children?(page6, options)
+    end
   end
 end

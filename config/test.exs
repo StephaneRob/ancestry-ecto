@@ -1,13 +1,10 @@
-use Mix.Config
+import Config
 
-# Print only warnings and errors during test
 config :logger, level: :info
 
 config :ancestry,
-  ecto_repos: [Ancestry.TestProject.Repo]
+  ecto_repos: [Ancestry.TestRepo]
 
-config :ancestry, Ancestry.TestProject.Repo,
-  adapter:  Ecto.Adapters.Postgres,
-  pool:     Ecto.Adapters.SQL.Sandbox,
+config :ancestry, Ancestry.TestRepo,
   database: "ancestry_test",
-  hostname: "localhost"
+  pool: Ecto.Adapters.SQL.Sandbox
