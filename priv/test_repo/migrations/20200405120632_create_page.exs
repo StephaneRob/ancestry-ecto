@@ -1,4 +1,4 @@
-defmodule Ancestry.TestRepo.Migrations.CreatePage do
+defmodule AncestryEcto.TestRepo.Migrations.CreatePage do
   use Ecto.Migration
 
   def change do

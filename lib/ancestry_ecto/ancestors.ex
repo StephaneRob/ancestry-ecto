@@ -1,8 +1,8 @@
-defmodule Ancestry.Ancestors do
+defmodule AncestryEcto.Ancestors do
   @moduledoc false
 
   import Ecto.Query
-  import Ancestry.Utils
+  import AncestryEcto.Utils
 
   def ids(model, opts) do
     model

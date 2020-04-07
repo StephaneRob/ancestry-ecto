@@ -1,8 +1,8 @@
-defmodule Ancestry.Page do
+defmodule AncestryEcto.Page do
   @moduledoc false
 
   use Ecto.Schema
-  use Ancestry, repo: Ancestry.TestRepo
+  use Ancestry, repo: AncestryEcto.TestRepo
 
   schema "pages" do
     field(:ancestry, :string)

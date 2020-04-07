@@ -1,7 +1,7 @@
-defmodule Ancestry.ParentTest do
-  use Ancestry.Case
+defmodule AncestryEcto.ParentTest do
+  use AncestryEcto.Case
 
-  alias Ancestry.Parent
+  alias AncestryEcto.Parent
 
   describe "w/ default option" do
     test "id/2", %{

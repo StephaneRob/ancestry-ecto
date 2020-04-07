@@ -1,7 +1,7 @@
-defmodule Ancestry.RepoTest do
-  use Ancestry.Case
+defmodule AncestryEcto.RepoTest do
+  use AncestryEcto.Case
 
-  alias Ancestry.{Page, TestRepo, Repo}
+  alias AncestryEcto.{Page, TestRepo, Repo}
 
   describe "delete/2" do
     test "with rootify", %{
@@ -73,7 +73,7 @@ defmodule Ancestry.RepoTest do
       options: options,
       pages: %{page2: page2}
     } do
-      assert_raise Ancestry.RestrictError, fn ->
+      assert_raise AncestryEcto.RestrictError, fn ->
         assert Repo.delete(page2, options)
       end
     end

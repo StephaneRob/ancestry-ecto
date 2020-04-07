@@ -1,9 +1,9 @@
-defmodule Ancestry.Mixfile do
+defmodule AncestryEcto.Mixfile do
   use Mix.Project
 
   def project do
     [
-      app: :ancestry,
+      app: :ancestry_ecto,
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,

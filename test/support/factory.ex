@@ -1,6 +1,6 @@
-defmodule Ancestry.Factory do
+defmodule AncestryEcto.Factory do
   @moduledoc false
 
-  use ExMachina.Ecto, repo: Ancestry.TestRepo
-  use Ancestry.PageFactory
+  use ExMachina.Ecto, repo: AncestryEcto.TestRepo
+  use AncestryEcto.PageFactory
 end

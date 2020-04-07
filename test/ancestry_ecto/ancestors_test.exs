@@ -1,7 +1,7 @@
-defmodule Ancestry.AncestorTest do
-  use Ancestry.Case
+defmodule AncestryEcto.AncestorTest do
+  use AncestryEcto.Case
 
-  alias Ancestry.{Page, Ancestors}
+  alias AncestryEcto.{Page, Ancestors}
 
   describe "w/ default option" do
     test "ids/2", %{

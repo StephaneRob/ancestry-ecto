@@ -1,7 +1,7 @@
-defmodule Ancestry.ChildrenTest do
-  use Ancestry.Case
+defmodule AncestryEcto.ChildrenTest do
+  use AncestryEcto.Case
 
-  alias Ancestry.{Children, Page}
+  alias AncestryEcto.{Children, Page}
 
   describe "w/ default option" do
     test "list children ids", %{

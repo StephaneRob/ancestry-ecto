@@ -1,10 +1,10 @@
-defmodule Ancestry.PageFactory do
+defmodule AncestryEcto.PageFactory do
   @moduledoc false
 
   defmacro __using__(_opts) do
     quote do
       def page_factory do
-        %Ancestry.Page{
+        %AncestryEcto.Page{
           reference: Ecto.UUID.generate()
         }
       end

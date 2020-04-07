@@ -1,10 +1,10 @@
-defmodule Ancestry.Repo do
+defmodule AncestryEcto.Repo do
   @moduledoc false
 
   alias Ecto.Multi
 
-  import Ancestry.Utils
-  alias Ancestry.{Ancestors, Children, Descendants}
+  import AncestryEcto.Utils
+  alias AncestryEcto.{Ancestors, Children, Descendants}
 
   def delete(model, opts) do
     multi =
@@ -21,7 +21,7 @@ defmodule Ancestry.Repo do
   def apply_orphan_strategy(_repo, %{delete: model}, :restrict, opts) do
     case Children.children?(model, opts) do
       true ->
-        raise(Ancestry.RestrictError)
+        raise(AncestryEcto.RestrictError)
 
       _ ->
         {:ok, nil}

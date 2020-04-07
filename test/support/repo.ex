@@ -1,8 +1,8 @@
-defmodule Ancestry.TestRepo do
+defmodule AncestryEcto.TestRepo do
   @moduledoc false
 
   use Ecto.Repo,
-    otp_app: :ancestry,
+    otp_app: :ancestry_ecto,
     adapter: Ecto.Adapters.Postgres
 
   def init(_type, config) do

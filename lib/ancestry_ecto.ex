@@ -87,7 +87,7 @@ defmodule Ancestry do
         orphan_strategy: options[:orphan_strategy] || :rootify
       ]
 
-      alias Ancestry.{Ancestors, Children, Descendants, Parent, Repo, Root, Siblings}
+      alias AncestryEcto.{Ancestors, Children, Descendants, Parent, Repo, Root, Siblings}
 
       def roots do
         Root.list(@opts)

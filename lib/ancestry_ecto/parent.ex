@@ -1,9 +1,9 @@
-defmodule Ancestry.Parent do
+defmodule AncestryEcto.Parent do
   @moduledoc false
 
-  import Ancestry.Utils
+  import AncestryEcto.Utils
 
-  alias Ancestry.Ancestors
+  alias AncestryEcto.Ancestors
 
   def id(model, opts) do
     case Ancestors.ids(model, opts) do

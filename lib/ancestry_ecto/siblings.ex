@@ -1,8 +1,8 @@
-defmodule Ancestry.Siblings do
+defmodule AncestryEcto.Siblings do
   @moduledoc false
 
   import Ecto.Query
-  import Ancestry.Utils
+  import AncestryEcto.Utils
 
   def list(model, opts) do
     query(model, opts)

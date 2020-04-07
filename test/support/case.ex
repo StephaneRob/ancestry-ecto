@@ -1,8 +1,8 @@
-defmodule Ancestry.Case do
+defmodule AncestryEcto.Case do
   @moduledoc false
 
   use ExUnit.CaseTemplate
-  alias Ancestry.{Factory, Page, TestRepo}
+  alias AncestryEcto.{Factory, Page, TestRepo}
 
   @options [
     module: Page,

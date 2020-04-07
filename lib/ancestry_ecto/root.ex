@@ -1,9 +1,9 @@
-defmodule Ancestry.Root do
+defmodule AncestryEcto.Root do
   @moduledoc false
 
   import Ecto.Query
 
-  import Ancestry.Utils
+  import AncestryEcto.Utils
 
   def list(opts) do
     query =

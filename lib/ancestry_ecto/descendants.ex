@@ -1,10 +1,10 @@
-defmodule Ancestry.Descendants do
+defmodule AncestryEcto.Descendants do
   @moduledoc false
 
   import Ecto.Query
-  import Ancestry.Utils
+  import AncestryEcto.Utils
 
-  alias Ancestry.Children
+  alias AncestryEcto.Children
 
   def list(model, opts) do
     query(model, opts)

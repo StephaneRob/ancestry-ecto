@@ -1,7 +1,7 @@
-defmodule Ancestry.Test.RootsTest do
-  use Ancestry.Case
+defmodule AncestryEcto.Test.RootsTest do
+  use AncestryEcto.Case
 
-  alias Ancestry.{Page, Root, TestRepo}
+  alias AncestryEcto.{Page, Root, TestRepo}
 
   describe "w/ default option" do
     test "get all roots elements", %{options: options} do

@@ -1,4 +1,4 @@
-defmodule Ancestry.Utils do
+defmodule AncestryEcto.Utils do
   @moduledoc false
 
   [:module, :repo, :column, :attribute, :orphan_strategy]
