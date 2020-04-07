@@ -1,5 +1,7 @@
 # Ancestry
 
+![](https://github.com/StephaneRob/ancestry-ecto/workflows/tests/badge.svg)
+
 _WIP_
 
 ## Installation
@@ -106,7 +108,6 @@ MyModel.descendants(model)
   - [ ] destroy
   - [ ] adopt
   - [ ] restrict
-
 
 ## License
 
