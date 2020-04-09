@@ -2,7 +2,7 @@ defmodule AncestryEcto.Page do
   @moduledoc false
 
   use Ecto.Schema
-  use Ancestry, repo: AncestryEcto.TestRepo
+  use AncestryEcto, repo: AncestryEcto.TestRepo
 
   schema "pages" do
     field(:ancestry, :string)

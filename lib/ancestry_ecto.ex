@@ -1,6 +1,6 @@
-defmodule Ancestry do
+defmodule AncestryEcto do
   @moduledoc """
-  Ancestry
+  AncestryEcto
   """
 
   @doc """
@@ -87,7 +87,16 @@ defmodule Ancestry do
         orphan_strategy: options[:orphan_strategy] || :rootify
       ]
 
-      alias AncestryEcto.{Ancestors, Children, Descendants, Parent, Repo, Root, Siblings}
+      alias AncestryEcto.{
+        Ancestors,
+        Changeset,
+        Children,
+        Descendants,
+        Parent,
+        Repo,
+        Root,
+        Siblings
+      }
 
       def roots do
         Root.list(@opts)
@@ -143,6 +152,10 @@ defmodule Ancestry do
 
       def delete(model) do
         Repo.delete(model, @opts)
+      end
+
+      def cast_ancestry(changeset, attrs) do
+        Changeset.cast(changeset, attrs, @opts)
       end
     end
   end

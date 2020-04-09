@@ -1,4 +1,4 @@
-# Ancestry
+# AncestryEcto
 
 ![](https://github.com/StephaneRob/ancestry-ecto/workflows/tests/badge.svg)
 
@@ -44,7 +44,7 @@ Start using ancestry in your schema:
 ```elixir
 defmodule MyModel do
   use Ecto.Schema
-  use Ancestry
+  use AncestryEcto
 
   import Ecto.Changeset
 
@@ -59,7 +59,7 @@ end
 
 ```elixir
 
-use Ancestry,
+use AncestryEcto,
   repo: MyApp.Repo,
   column: :ancestry,
 
