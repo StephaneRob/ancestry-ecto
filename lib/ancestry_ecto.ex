@@ -59,7 +59,7 @@ defmodule AncestryEcto do
   @callback descendant_ids(record :: Ecto.Schema.t()) :: [String.t() | Integer.t()]
 
   @doc """
-  Siblings of the record, the record itself is included
+  Sibling of the record, the record itself is included
   """
   @callback siblings(record :: Ecto.Schema.t()) :: [Ecto.Schema.t()]
 
@@ -88,14 +88,14 @@ defmodule AncestryEcto do
       ]
 
       alias AncestryEcto.{
-        Ancestors,
+        Ancestor,
         Changeset,
         Children,
-        Descendants,
+        Descendant,
         Parent,
         Repo,
         Root,
-        Siblings
+        Sibling
       }
 
       def roots do
@@ -107,11 +107,11 @@ defmodule AncestryEcto do
       end
 
       def ancestor_ids(model) do
-        Ancestors.ids(model, @opts)
+        Ancestor.ids(model, @opts)
       end
 
       def ancestors(model) do
-        Ancestors.list(model, @opts)
+        Ancestor.list(model, @opts)
       end
 
       def parent_id(model) do
@@ -126,7 +126,7 @@ defmodule AncestryEcto do
         Children.list(model, @opts)
       end
 
-      def children_ids(model) do
+      def child_ids(model) do
         Children.ids(model, @opts)
       end
 
@@ -135,19 +135,19 @@ defmodule AncestryEcto do
       end
 
       def descendants(model) do
-        Descendants.list(model, @opts)
+        Descendant.list(model, @opts)
       end
 
       def descendant_ids(model) do
-        Descendants.ids(model, @opts)
+        Descendant.ids(model, @opts)
       end
 
       def siblings(model) do
-        Siblings.list(model, @opts)
+        Sibling.list(model, @opts)
       end
 
-      def siblings_ids(model) do
-        Siblings.ids(model, @opts)
+      def sibling_ids(model) do
+        Sibling.ids(model, @opts)
       end
 
       def delete(model) do

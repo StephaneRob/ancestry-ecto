@@ -1,5 +1,5 @@
 defmodule AncestryEcto.ChangesetTest do
-  use AncestryEcto.Case
+  use AncestryEcto.Case, async: true
 
   alias AncestryEcto.Changeset
 

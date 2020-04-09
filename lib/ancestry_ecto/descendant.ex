@@ -1,4 +1,4 @@
-defmodule AncestryEcto.Descendants do
+defmodule AncestryEcto.Descendant do
   @moduledoc false
 
   import Ecto.Query

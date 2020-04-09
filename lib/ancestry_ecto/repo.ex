@@ -4,7 +4,7 @@ defmodule AncestryEcto.Repo do
   alias Ecto.Multi
 
   import AncestryEcto.Utils
-  alias AncestryEcto.{Ancestors, Children, Descendants}
+  alias AncestryEcto.{Ancestor, Children, Descendant}
 
   def delete(model, opts) do
     multi =
@@ -29,7 +29,7 @@ defmodule AncestryEcto.Repo do
   end
 
   def apply_orphan_strategy(repo, %{delete: model}, :destroy, opts) do
-    Descendants.query(model, opts)
+    Descendant.query(model, opts)
     |> repo.delete_all
 
     {:ok, nil}
@@ -37,10 +37,10 @@ defmodule AncestryEcto.Repo do
 
   def apply_orphan_strategy(repo, %{delete: model}, :adopt, opts) do
     updates =
-      for descendant <- Descendants.list(model, opts) do
+      for descendant <- Descendant.list(model, opts) do
         new_ancestry =
           descendant
-          |> Ancestors.ids(opts)
+          |> Ancestor.ids(opts)
           |> Enum.reject(fn x -> x == model.id end)
           |> Enum.join("/")
 
@@ -62,7 +62,7 @@ defmodule AncestryEcto.Repo do
     model_ancestry = Children.ancestry(model, opts)
 
     updates =
-      for descendant <- Descendants.list(model, opts) do
+      for descendant <- Descendant.list(model, opts) do
         new_ancestry = descendant_ancestry(descendant.ancestry, model_ancestry)
 
         changeset =
