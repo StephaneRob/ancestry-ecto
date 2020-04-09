@@ -1,30 +1,59 @@
-defmodule Ancestry.Mixfile do
+defmodule AncestryEcto.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :ancestry,
-     version: "0.1.0-alpha.1",
-     elixir: "~> 1.4",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: "Ancestry for Ecto.",
-     package: [
-       licenses: ["MIT"],
-       links: %{"Github" => "https://github.com/StephaneRob/ancestry"},
-       maintainers: ["Stéphane ROBINO"]
-       ],
-     deps: deps()]
+    [
+      app: :ancestry_ecto,
+      version: "0.1.0",
+      elixir: "~> 1.9",
+      start_permanent: Mix.env() == :prod,
+      description: "Ancestry for Ecto.",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      name: "ancestry-ecto",
+      package: package(),
+      deps: deps(),
+      aliases: aliases(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
+    ]
   end
 
   def application do
-    # Specify extra applications you'll use from Erlang/Elixir
     [extra_applications: [:logger]]
   end
 
+  defp elixirc_paths(:test), do: ["test/support", "lib"]
+  defp elixirc_paths(_), do: ["lib"]
+
   defp deps do
     [
-      {:ecto, "~> 2.1"},
-      {:postgrex, "~> 0.13", only: :test},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+      {:ecto, "~> 3.4.0"},
+      {:ecto_sql, "~> 3.0", only: [:dev, :test]},
+      {:postgrex, ">= 0.0.0", only: [:dev, :test]},
+      {:ex_machina, "~> 2.4", only: :test},
+      {:excoveralls, "~> 0.10", only: :test},
+      {:credo, "~> 1.3.0", only: [:dev, :test], runtime: false}
+    ]
+  end
+
+  defp aliases do
+    [
+      # Ensures database is reset before tests are run
+      test: ["ecto.drop --quiet", "ecto.create --quiet", "ecto.migrate --quiet", "test"]
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Stéphane Robino"],
+      licenses: ["BSD-2-Clause"],
+      links: %{"GitHub" => "https://github.com/StephaneRob/ancestry-ecto"}
     ]
   end
 end
