@@ -1,4 +1,4 @@
-defmodule AncestryEcto.Siblings do
+defmodule AncestryEcto.Sibling do
   @moduledoc false
 
   import Ecto.Query

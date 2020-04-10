@@ -1,14 +1,14 @@
 defmodule AncestryEcto.AncestorTest do
-  use AncestryEcto.Case
+  use AncestryEcto.Case, async: true
 
-  alias AncestryEcto.{Page, Ancestors}
+  alias AncestryEcto.{Page, Ancestor}
 
   describe "w/ default option" do
     test "ids/2", %{
       options: options,
       pages: %{page1: page1, page2: page2, page4: page4, page3: page3}
     } do
-      assert Ancestors.ids(page4, options) == [page1.id, page2.id, page3.id]
+      assert Ancestor.ids(page4, options) == [page1.id, page2.id, page3.id]
     end
 
     test "list/2", %{
@@ -20,7 +20,7 @@ defmodule AncestryEcto.AncestorTest do
       page3_id = page3.id
 
       assert [%Page{id: ^page1_id}, %Page{id: ^page2_id}, %Page{id: ^page3_id}] =
-               Ancestors.list(page4, options)
+               Ancestor.list(page4, options)
     end
   end
 
@@ -31,7 +31,7 @@ defmodule AncestryEcto.AncestorTest do
       options: options,
       pages: %{page1: page1, page2: page2, page4: page4, page3: page3}
     } do
-      assert Ancestors.ids(page4, options) == [page1.id, page2.id, page3.id]
+      assert Ancestor.ids(page4, options) == [page1.id, page2.id, page3.id]
     end
 
     test "list/2", %{
@@ -43,7 +43,7 @@ defmodule AncestryEcto.AncestorTest do
       page3_id = page3.id
 
       assert [%Page{id: ^page1_id}, %Page{id: ^page2_id}, %Page{id: ^page3_id}] =
-               Ancestors.list(page4, options)
+               Ancestor.list(page4, options)
     end
   end
 
@@ -57,7 +57,7 @@ defmodule AncestryEcto.AncestorTest do
       options: options,
       pages: %{page1: page1, page2: page2, page4: page4, page3: page3}
     } do
-      assert Ancestors.ids(page4, options) == [page1.reference, page2.reference, page3.reference]
+      assert Ancestor.ids(page4, options) == [page1.reference, page2.reference, page3.reference]
     end
 
     test "list/2", %{
@@ -69,7 +69,7 @@ defmodule AncestryEcto.AncestorTest do
       page3_id = page3.id
 
       assert [%Page{id: ^page1_id}, %Page{id: ^page2_id}, %Page{id: ^page3_id}] =
-               Ancestors.list(page4, options)
+               Ancestor.list(page4, options)
     end
   end
 end

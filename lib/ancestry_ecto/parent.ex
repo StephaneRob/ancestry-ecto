@@ -3,10 +3,10 @@ defmodule AncestryEcto.Parent do
 
   import AncestryEcto.Utils
 
-  alias AncestryEcto.Ancestors
+  alias AncestryEcto.Ancestor
 
   def id(model, opts) do
-    case Ancestors.ids(model, opts) do
+    case Ancestor.ids(model, opts) do
       [] ->
         nil
 

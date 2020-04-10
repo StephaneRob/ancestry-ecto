@@ -1,6 +1,6 @@
-defmodule Ancestry do
+defmodule AncestryEcto do
   @moduledoc """
-  Ancestry
+  AncestryEcto
   """
 
   @doc """
@@ -59,7 +59,7 @@ defmodule Ancestry do
   @callback descendant_ids(record :: Ecto.Schema.t()) :: [String.t() | Integer.t()]
 
   @doc """
-  Siblings of the record, the record itself is included
+  Sibling of the record, the record itself is included
   """
   @callback siblings(record :: Ecto.Schema.t()) :: [Ecto.Schema.t()]
 
@@ -87,7 +87,16 @@ defmodule Ancestry do
         orphan_strategy: options[:orphan_strategy] || :rootify
       ]
 
-      alias AncestryEcto.{Ancestors, Children, Descendants, Parent, Repo, Root, Siblings}
+      alias AncestryEcto.{
+        Ancestor,
+        Changeset,
+        Children,
+        Descendant,
+        Parent,
+        Repo,
+        Root,
+        Sibling
+      }
 
       def roots do
         Root.list(@opts)
@@ -98,11 +107,11 @@ defmodule Ancestry do
       end
 
       def ancestor_ids(model) do
-        Ancestors.ids(model, @opts)
+        Ancestor.ids(model, @opts)
       end
 
       def ancestors(model) do
-        Ancestors.list(model, @opts)
+        Ancestor.list(model, @opts)
       end
 
       def parent_id(model) do
@@ -117,7 +126,7 @@ defmodule Ancestry do
         Children.list(model, @opts)
       end
 
-      def children_ids(model) do
+      def child_ids(model) do
         Children.ids(model, @opts)
       end
 
@@ -126,23 +135,27 @@ defmodule Ancestry do
       end
 
       def descendants(model) do
-        Descendants.list(model, @opts)
+        Descendant.list(model, @opts)
       end
 
       def descendant_ids(model) do
-        Descendants.ids(model, @opts)
+        Descendant.ids(model, @opts)
       end
 
       def siblings(model) do
-        Siblings.list(model, @opts)
+        Sibling.list(model, @opts)
       end
 
-      def siblings_ids(model) do
-        Siblings.ids(model, @opts)
+      def sibling_ids(model) do
+        Sibling.ids(model, @opts)
       end
 
       def delete(model) do
         Repo.delete(model, @opts)
+      end
+
+      def cast_ancestry(changeset, attrs) do
+        Changeset.cast(changeset, attrs, @opts)
       end
     end
   end

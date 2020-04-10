@@ -1,5 +1,5 @@
 defmodule AncestryEcto.Test.RootsTest do
-  use AncestryEcto.Case
+  use AncestryEcto.Case, async: true
 
   alias AncestryEcto.{Page, Root, TestRepo}
 
