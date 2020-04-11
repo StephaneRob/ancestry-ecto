@@ -55,17 +55,7 @@ end
 
 ```
 
-### Available options
-
-```elixir
-
-use AncestryEcto,
-  repo: MyApp.Repo,
-  column: :ancestry,
-
-  model: Myapp.Page,
-  orphan_strategy: :rootify
-```
+### Usage
 
 - repo : running ecto repo (optional, **default: `YourApp.Repo`**)
 - column : column where the tree will be persisted (optional, **default `:ancestry`**)
@@ -77,19 +67,78 @@ use AncestryEcto,
   - `:restrict`: An AncestryException is raised if any children exist
   - `:adopt`: The orphan subtree is added to the parent of the deleted node, If the deleted node is Root, then rootify the orphan subtree.
 
-### Usage
+For the following setup
 
 ```elixir
-MyModel.roots
-MyModel.root?(model)
-MyModel.ancestor_ids(model)
-MyModel.ancestors(model)
-MyModel.parent_id(model)
-MyModel.parent(model)
-MyModel.children(model)
-MyModel.child_ids(model)
-MyModel.siblings(model)
-MyModel.sibling_ids(model)
-MyModel.descendants_ids(model)
-MyModel.descendants(model)
+# Implicit options
+# repo: MyApp.Repo
+# column: :ancestry
+# attribute: {:id, :integer}
+# schema: Myapp.Page
+# orphan_strategy: :rootify
+
+defmodule MyApp.Page do
+  use Ecto.Schema
+  use AncestryEcto
+
+  schema "pages" do
+    field(:ancestry)
+    field(:title)
+
+    timestamps()
+  end
+end
+```
+
+#### Available functions
+
+| method           | return value                                                               | usage example                       |
+| ---------------- | -------------------------------------------------------------------------- | ----------------------------------- |
+| `roots`          | all root node                                                              | `MyApp.Page.roots`                  |
+| `is_root?`       | true if the record is a root node, false otherwise                         | `MyApp.Page.is_root?(record)`       |
+| `parent`         | parent of the record, nil for a root node                                  | `MyApp.Page.parent(record)`         |
+| `parent_id`      | parent id of the record, nil for a root node                               | `MyApp.Page.parent_id(record)`      |
+| `ancestors`      | ancestors of the record, starting with the root and ending with the parent | `MyApp.Page.ancestors(record)`      |
+| `ancestor_ids`   | ancestor ids of the record                                                 | `MyApp.Page.ancestor_ids(record)`   |
+| `children`       | direct children of the record                                              | `MyApp.Page.children(record)`       |
+| `child_ids`      | direct children's ids                                                      | `MyApp.Page.child_ids(record)`      |
+| `siblings`       | siblings of the record, the record itself is included\*                    | `MyApp.Page.siblings(record)`       |
+| `sibling_ids`    | sibling ids                                                                | `MyApp.Page.sibling_ids(record)`    |
+| `descendants`    | direct and indirect children of the record                                 | `MyApp.Page.descendants(record)`    |
+| `descendant_ids` | direct and indirect children's ids of the record                           | `MyApp.Page.descendant_ids(record)` |
+
+### Changeset usage
+
+`cast_ancestry/2` allows to cast automatically `"parent_ATTRIBUTE"` param into ancestry.
+
+```elixir
+defmodule MyApp.Page do
+  use Ecto.Schema
+  use AncestryEcto
+
+  schema "pages" do
+    field(:ancestry)
+    field(:title)
+
+    timestamps()
+  end
+
+  def changeset(page, attrs) do
+    page
+    |> cast(attrs, [:title])
+    |> cast_ancestry(attrs)
+  end
+end
+```
+
+ex:
+
+```elixir
+# If page id 10 has ancestry "5"
+iex> Page.changeset(%{}, %{"title" => "Hello world!", "parent_id" => 10})
+%Ecto.Changeset{
+  action: nil,
+  changes: %{title: "Hello world!", ancestry: "5/10"},
+  ...
+}
 ```
