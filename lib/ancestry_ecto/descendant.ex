@@ -15,10 +15,6 @@ defmodule AncestryEcto.Descendant do
     for child <- list(model, opts), do: Map.get(child, attribute_column(opts))
   end
 
-  def children?(model, opts) do
-    list(model, opts) |> Enum.any?()
-  end
-
   def query(model, opts) do
     from(u in module(opts),
       where:

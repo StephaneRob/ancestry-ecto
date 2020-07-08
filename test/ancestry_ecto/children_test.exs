@@ -8,7 +8,7 @@ defmodule AncestryEcto.ChildrenTest do
       options: options,
       pages: %{page1: page1, page6: page6, page2: page2}
     } do
-      assert Children.ids(page1, options) == [page6.id, page2.id]
+      assert Children.ids(page1, options) |> Enum.sort() == [page2.id, page6.id]
     end
 
     test "list children", %{
@@ -17,15 +17,17 @@ defmodule AncestryEcto.ChildrenTest do
     } do
       page6_id = page6.id
       page2_id = page2.id
-      assert [%Page{id: ^page6_id}, %Page{id: ^page2_id}] = Children.list(page1, options)
+
+      assert [%Page{id: ^page2_id}, %Page{id: ^page6_id}] =
+               Children.list(page1, options) |> Enum.sort(&(&1.id < &2.id))
     end
 
-    test "children?/2", %{
+    test "any?/2", %{
       options: options,
       pages: %{page1: page1, page6: page6}
     } do
-      assert Children.children?(page1, options)
-      refute Children.children?(page6, options)
+      assert Children.any?(page1, options)
+      refute Children.any?(page6, options)
     end
   end
 
@@ -49,12 +51,12 @@ defmodule AncestryEcto.ChildrenTest do
                Children.list(page1, options) |> Enum.sort(&(&1.id < &2.id))
     end
 
-    test "children?/2", %{
+    test "any?/2", %{
       options: options,
       pages: %{page1: page1, page6: page6}
     } do
-      assert Children.children?(page1, options)
-      refute Children.children?(page6, options)
+      assert Children.any?(page1, options)
+      refute Children.any?(page6, options)
     end
   end
 
@@ -83,12 +85,12 @@ defmodule AncestryEcto.ChildrenTest do
                Children.list(page1, options) |> Enum.sort(&(&1.id < &2.id))
     end
 
-    test "children?/2", %{
+    test "any?/2", %{
       options: options,
       pages: %{page1: page1, page6: page6}
     } do
-      assert Children.children?(page1, options)
-      refute Children.children?(page6, options)
+      assert Children.any?(page1, options)
+      refute Children.any?(page6, options)
     end
   end
 end

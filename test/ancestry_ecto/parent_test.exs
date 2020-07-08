@@ -21,6 +21,14 @@ defmodule AncestryEcto.ParentTest do
       assert Parent.get(page6, options) == page1
       assert Parent.get(page4, options) == page3
     end
+
+    test "any?/2", %{
+      options: options,
+      pages: %{page1: page1, page6: page6}
+    } do
+      refute Parent.any?(page1, options)
+      assert Parent.any?(page6, options)
+    end
   end
 
   describe "w/ custom ancestry column" do

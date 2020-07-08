@@ -17,8 +17,9 @@ defmodule AncestryEcto.Children do
     end
   end
 
-  def children?(model, opts) do
-    list(model, opts) |> Enum.any?()
+  def any?(model, opts) do
+    query(model, opts)
+    |> repo(opts).exists?()
   end
 
   def query(model, opts) do

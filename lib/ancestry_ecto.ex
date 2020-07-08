@@ -69,6 +69,11 @@ defmodule AncestryEcto do
   @callback siblings_ids(record :: Ecto.Schema.t()) :: [String.t() | Integer.t()]
 
   @doc """
+  true if the record's parent has more than one child
+  """
+  @callback has_siblings?(record :: Ecto.Schema.t()) :: boolean()
+
+  @doc """
     Delete record and apply strategy to children
   """
   @callback delete(record :: Ecto.Schema.t()) ::
@@ -95,6 +100,7 @@ defmodule AncestryEcto do
         Parent,
         Repo,
         Root,
+        Subtree,
         Sibling
       }
 
@@ -122,6 +128,10 @@ defmodule AncestryEcto do
         Parent.get(model, @opts)
       end
 
+      def has_parent?(model) do
+        Parent.any?(model, @opts)
+      end
+
       def children(model) do
         Children.list(model, @opts)
       end
@@ -131,7 +141,7 @@ defmodule AncestryEcto do
       end
 
       def children?(model) do
-        Children.children?(model, @opts)
+        Children.any?(model, @opts)
       end
 
       def descendants(model) do
@@ -148,6 +158,18 @@ defmodule AncestryEcto do
 
       def sibling_ids(model) do
         Sibling.ids(model, @opts)
+      end
+
+      def has_siblings?(model) do
+        Sibling.any?(model, @opts)
+      end
+
+      def subtree(model, options \\ []) do
+        Subtree.list(model, options, @opts)
+      end
+
+      def subtree_ids(model) do
+        Subtree.ids(model, @opts)
       end
 
       def delete(model) do

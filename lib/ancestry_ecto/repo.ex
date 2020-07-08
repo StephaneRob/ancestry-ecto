@@ -19,7 +19,7 @@ defmodule AncestryEcto.Repo do
   end
 
   def apply_orphan_strategy(_repo, %{delete: model}, :restrict, opts) do
-    case Children.children?(model, opts) do
+    case Children.any?(model, opts) do
       true ->
         raise(AncestryEcto.RestrictError)
 

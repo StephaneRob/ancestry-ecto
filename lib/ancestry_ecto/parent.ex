@@ -25,4 +25,11 @@ defmodule AncestryEcto.Parent do
         repo(opts).get_by!(module(opts), [{attribute_column(opts), id}])
     end
   end
+
+  def any?(model, opts) do
+    case id(model, opts) do
+      nil -> false
+      _ -> true
+    end
+  end
 end

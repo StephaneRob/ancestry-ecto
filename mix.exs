@@ -38,7 +38,8 @@ defmodule AncestryEcto.Mixfile do
       {:postgrex, ">= 0.0.0", only: [:dev, :test]},
       {:ex_machina, "~> 2.4", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
-      {:credo, "~> 1.3.0", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.3.0", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false}
     ]
   end
 
