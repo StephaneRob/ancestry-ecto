@@ -92,20 +92,57 @@ end
 
 #### Available functions
 
-| method           | return value                                                               | usage example                       |
-| ---------------- | -------------------------------------------------------------------------- | ----------------------------------- |
-| `roots`          | all root node                                                              | `MyApp.Page.roots`                  |
-| `is_root?`       | true if the record is a root node, false otherwise                         | `MyApp.Page.is_root?(record)`       |
-| `parent`         | parent of the record, nil for a root node                                  | `MyApp.Page.parent(record)`         |
-| `parent_id`      | parent id of the record, nil for a root node                               | `MyApp.Page.parent_id(record)`      |
-| `ancestors`      | ancestors of the record, starting with the root and ending with the parent | `MyApp.Page.ancestors(record)`      |
-| `ancestor_ids`   | ancestor ids of the record                                                 | `MyApp.Page.ancestor_ids(record)`   |
-| `children`       | direct children of the record                                              | `MyApp.Page.children(record)`       |
-| `child_ids`      | direct children's ids                                                      | `MyApp.Page.child_ids(record)`      |
-| `siblings`       | siblings of the record, the record itself is included\*                    | `MyApp.Page.siblings(record)`       |
-| `sibling_ids`    | sibling ids                                                                | `MyApp.Page.sibling_ids(record)`    |
-| `descendants`    | direct and indirect children of the record                                 | `MyApp.Page.descendants(record)`    |
-| `descendant_ids` | direct and indirect children's ids of the record                           | `MyApp.Page.descendant_ids(record)` |
+| method             | return value                                                               | usage example                               |
+| ------------------ | -------------------------------------------------------------------------- | ------------------------------------------- |
+| `roots/0`          | all root node                                                              | `MyApp.Page.roots`                          |
+| `is_root?/1`       | true if the record is a root node, false otherwise                         | `MyApp.Page.is_root?(record)`               |
+| `parent/1`         | parent of the record, nil for a root node                                  | `MyApp.Page.parent(record)`                 |
+| `parent_id/1`      | parent id of the record, nil for a root node                               | `MyApp.Page.parent_id(record)`              |
+| `has_parent?/1`    | true if the record has a parent, false otherwise                           | `MyApp.Page.has_parent?(record)`            |
+| `ancestors/1`      | ancestors of the record, starting with the root and ending with the parent | `MyApp.Page.ancestors(record)`              |
+| `ancestor_ids/1`   | ancestor ids of the record                                                 | `MyApp.Page.ancestor_ids(record)`           |
+| `children/1`       | direct children of the record                                              | `MyApp.Page.children(record)`               |
+| `child_ids/1`      | direct children's ids                                                      | `MyApp.Page.child_ids(record)`              |
+| `siblings/1`       | siblings of the record, the record itself is included\*                    | `MyApp.Page.siblings(record)`               |
+| `sibling_ids/1`    | sibling ids                                                                | `MyApp.Page.sibling_ids(record)`            |
+| `has_siblings?/1`  | true if the record's parent has more than one child                        | `MyApp.Page.has_siblings?(record)`          |
+| `descendants/1`    | direct and indirect children of the record                                 | `MyApp.Page.descendants(record)`            |
+| `descendant_ids/1` | direct and indirect children's ids of the record                           | `MyApp.Page.descendant_ids(record)`         |
+| `subtree/1`        | the model on descendants and itself                                        | `MyApp.Page.subtree(record)`                |
+| `subtree/2`        | the arranged model on descendants and itself                               | `MyApp.Page.subtree(record, arrange: true)` |
+| `subtree_ids/1`    | a list of all ids in the record's subtree                                  | `MyApp.Page.subtree_ids(record)`            |
+
+##### Subtree w/ arrangement
+
+```elixir
+%{
+  %AncestryEcto.Page{
+    ancestry: nil,
+    id: 319,
+  } => %{
+    %AncestryEcto.Page{
+      ancestry: "319",
+      id: 320,
+    } => %{
+      %AncestryEcto.Page{
+        ancestry: "319/320",
+          "a9b305f0-34e5-4940-9e7d-5b9fc755bae7/9566563f-1281-48d2-8b1a-cdb98ba1f25d",
+        id: 321,
+      } => %{
+        %AncestryEcto.Page{
+          ancestry: "319/320/321",
+          id: 322,
+        } => %{}
+      }
+    },
+    %AncestryEcto.Page{
+      ancestry: "319",
+      id: 324,
+    } => %{}
+  }
+}
+
+```
 
 ### Changeset usage
 

@@ -73,9 +73,11 @@ defmodule AncestryEcto.RepoTest do
       options: options,
       pages: %{page2: page2}
     } do
-      assert_raise AncestryEcto.RestrictError, fn ->
-        assert Repo.delete(page2, options)
-      end
+      assert_raise AncestryEcto.RestrictError,
+                   "Cannot delete record because it has descendants.",
+                   fn ->
+                     assert Repo.delete(page2, options)
+                   end
     end
   end
 end

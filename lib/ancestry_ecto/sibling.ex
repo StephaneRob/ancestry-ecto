@@ -13,8 +13,11 @@ defmodule AncestryEcto.Sibling do
     for sibling <- list(model, opts), do: Map.get(sibling, attribute_column(opts))
   end
 
-  def siblings?(model, opts) do
-    list(model, opts) |> Enum.any?()
+  def any?(model, opts) do
+    from(s in query(model, opts),
+      where: field(s, ^attribute_column(opts)) != ^Map.get(model, attribute_column(opts))
+    )
+    |> repo(opts).exists?()
   end
 
   defp query(model, opts) do

@@ -27,6 +27,14 @@ defmodule AncestryEcto.SiblingTest do
                %Page{id: ^page1_id}
              ] = Sibling.list(page1, options) |> Enum.sort(&(&1.id > &2.id))
     end
+
+    test "any?/2", %{
+      options: options,
+      pages: %{page2: page2, page4: page4}
+    } do
+      refute Sibling.any?(page4, options)
+      assert Sibling.any?(page2, options)
+    end
   end
 
   describe "w/ custom ancestry column" do
